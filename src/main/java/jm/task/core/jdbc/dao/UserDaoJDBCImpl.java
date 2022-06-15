@@ -11,6 +11,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
     }
 
+    Connection connection = Util.getConnection();
 
     @Override
     public void createUsersTable() {
@@ -21,9 +22,9 @@ public class UserDaoJDBCImpl implements UserDao {
                 "  `age` INT(3) NOT NULL,\n" +
                 "  PRIMARY KEY (`id`),\n" +
                 "  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);";
-        try (Connection connection = Util.getConnection();
-        Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
+            System.out.println("The table 'users' was create successfully");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -33,9 +34,9 @@ public class UserDaoJDBCImpl implements UserDao {
     @Override
     public void dropUsersTable() {
         String sql = "DROP TABLE IF EXISTS users;";
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
+            System.out.println("The table was delete successfully");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,13 +44,14 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        try (Connection connection = Util.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUE (?, ?, ?)")) {
+        String sql = "INSERT INTO users (name, lastName, age) VALUE (?, ?, ?);";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
 
             preparedStatement.executeUpdate();
+            System.out.println("User " + name + " " + lastName + " was added");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,16 +61,14 @@ public class UserDaoJDBCImpl implements UserDao {
     @Override
     public void removeUserById(long id) {
         String sql = "DELETE FROM users WHERE ID = ?;";
-        try (Connection connection = Util.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery("SELECT * FROM users")) {
             System.out.println("User was deleted");
-            ResultSet resultSet = preparedStatement.executeQuery("SELECT * FROM users");
+
             while (resultSet.next()) {
                 User user = new User();
                 System.out.println(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,10 +77,9 @@ public class UserDaoJDBCImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM users;";
 
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 User user = new User();
@@ -102,9 +101,9 @@ public class UserDaoJDBCImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         String sql = "TRUNCATE users;";
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
+            System.out.println("The table was cleared");
         } catch (SQLException e) {
             e.printStackTrace();
         }
