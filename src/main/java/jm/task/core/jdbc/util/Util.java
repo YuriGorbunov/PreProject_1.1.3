@@ -4,14 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class Util {
 
     private final static String URL = "jdbc:mysql://localhost:3306/db_users";
     private final static String USERNAME = "root";
     private final static String PASSWORD = "lovka4";
 
-    public static Connection getConnection () {
-        Connection connection = null;
+    private static Connection connection;
+
+    public static Connection getConnection() {
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             System.out.println("Connection complete successfully");
@@ -19,5 +21,14 @@ public class Util {
             e.printStackTrace();
         }
         return connection;
+    }
+
+    public static void connectionClose() {
+        try {
+            connection.close();
+            System.out.println("Connection close successfully");
+        } catch (NullPointerException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
