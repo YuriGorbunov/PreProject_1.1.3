@@ -16,6 +16,7 @@ public class UserServiceImpl implements UserService {
     public void createUsersTable() {
         userDaoJDBC.createUsersTable();
     }
+
     @Override
     public void dropUsersTable() {
         userDaoJDBC.dropUsersTable();
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        List <User> userList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
         return userDaoJDBC.getAllUsers();
     }
 

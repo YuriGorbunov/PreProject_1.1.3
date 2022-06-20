@@ -1,8 +1,6 @@
 package jm.task.core.jdbc.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table
 public class User {
@@ -62,6 +60,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "Пользователь со следующими данными был добавлен в БД: " + name + ", " + lastName + ", " + age;
+        return "Пользователь " + id + " : " + name + ", " + lastName + ", " + age;
     }
 }

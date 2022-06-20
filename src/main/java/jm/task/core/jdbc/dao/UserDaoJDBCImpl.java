@@ -2,6 +2,7 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.Session;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,9 +14,10 @@ public class UserDaoJDBCImpl implements UserDao {
 
     Connection connection = Util.getConnection();
 
+
     @Override
     public void createUsersTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS`db_users`.`users` (\n" +
+        String sql = "CREATE TABLE IF NOT EXISTS`db_users_jdbc`.`users` (\n" +
                 "  `id` INT NOT NULL AUTO_INCREMENT,\n" +
                 "  `name` VARCHAR(45) NOT NULL,\n" +
                 "  `lastName` VARCHAR(45) NOT NULL,\n" +
